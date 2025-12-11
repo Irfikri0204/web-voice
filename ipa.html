@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>IPA</title>
+</head>
+
+<body>
+<h1>Pelajaran IPA</h1>
+<p>Ini adalah halaman IPA.</p>
+<p>Ucapkan: "kembali ke menu utama"</p>
+
+<script>
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const rec = new SR();
+rec.lang = "id-ID";
+rec.continuous = true;
+rec.start();
+
+rec.onresult = (e) => {
+    const s = e.results[e.resultIndex][0].transcript.toLowerCase();
+    if (s.includes("kembali ke menu utama")) location.href = "index.html";
+};
+rec.onend = () => rec.start();
+</script>
+
+</body>
+</html>

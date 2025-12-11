@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Belajar Suara</title>
+
+<style>
+    body { font-family: Arial; padding: 30px; }
+    .menu { font-size: 26px; margin: 20px 0; cursor: pointer; }
+    #status { background: #007bff; color: #fff; padding: 10px; }
+</style>
+</head>
+
+<body>
+<h1>📚 Menu Pembelajaran</h1>
+<p>Ucapkan: "buka halaman IPA" | "buka halaman Matematika" | "buka halaman Bahasa Inggris"</p>
+
+<div class="menu" onclick="location.href='ipa.html'">IPA</div>
+<div class="menu" onclick="location.href='matematika.html'">Matematika</div>
+<div class="menu" onclick="location.href='inggris.html'">Bahasa Inggris</div>
+
+<div id="status">🎤 Mendengarkan...</div>
+
+<script>
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const rec = new SR();
+rec.lang = "id-ID";
+rec.continuous = true;
+rec.start();
+
+document.getElementById("status").innerText = "🎤 Mendengarkan...";
+
+rec.onresult = (e) => {
+    const speech = e.results[e.resultIndex][0].transcript.toLowerCase();
+    
+    if (speech.includes("buka halaman ipa")) location.href = "ipa.html";
+    if (speech.includes("buka halaman matematika")) location.href = "matematika.html";
+    if (speech.includes("buka halaman bahasa inggris")) location.href = "inggris.html";
+};
+
+rec.onend = () => rec.start();
+</script>
+
+</body>
+</html>
