@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Suara</title>
+
+<style>
+    body { font-family: Arial; padding: 30px; background: #eef3ff; }
+    .card {
+        background: #fff; padding: 20px; border-radius: 12px;
+        margin-bottom: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .option { margin: 10px 0; font-size: 20px; }
+    #status {
+        background: #007bff; color: #fff; padding: 10px;
+        position: fixed; top: 10px; right: 10px; border-radius: 6px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>Kuis Kendali Suara</h1>
+<p>Jawab dengan suara: <b>"Jawaban A"</b>, <b>"Jawaban B"</b>, <b>"Jawaban C"</b>, <b>"Jawaban D"</b></p>
+
+<div class="card">
+    <h2 id="question">Apa ibu kota Indonesia?</h2>
+
+    <div class="option">A. Jakarta</div>
+    <div class="option">B. Surabaya</div>
+    <div class="option">C. Bandung</div>
+    <div class="option">D. Medan</div>
+</div>
+
+<h3 id="result">Menunggu jawaban...</h3>
+
+<div id="status">🎤 Mendengarkan...</div>
+
+<script>
+/* Text-to-Speech */
+function speak(text) {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "id-ID";
+    speechSynthesis.speak(u);
+}
+
+/* Voice Recognition */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const rec = new SR();
+rec.lang = "id-ID";
+rec.continuous = true;
+
+const correctAnswer = "a";  // Jawaban benar
+const resultEl = document.getElementById("result");
+const statusEl = document.getElementById("status");
+
+rec.start();
+
+rec.onresult = (e) => {
+    const speech = e.results[e.resultIndex][0].transcript.toLowerCase();
+    statusEl.innerText = "🎤 Anda berkata: " + speech;
+
+    let answer = null;
+
+    if (speech.includes("a")) answer = "a";
+    if (speech.includes("b")) answer = "b";
+    if (speech.includes("c")) answer = "c";
+    if (speech.includes("d")) answer = "d";
+
+    if (!answer) return;
+
+    if (answer === correctAnswer) {
+        resultEl.innerHTML = "✔ Jawaban Anda BENAR!";
+        resultEl.style.color = "green";
+        speak("Jawaban Anda benar!");
+    } else {
+        resultEl.innerHTML = "❌ Jawaban Anda SALAH!";
+        resultEl.style.color = "red";
+        speak("Jawaban Anda salah.");
+    }
+};
+
+rec.onend = () => rec.start();
+</script>
+
+</body>
+</html>
